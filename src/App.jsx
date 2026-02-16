@@ -1,11 +1,17 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import TableauDeBord from "./pages/TableauDeBord";
 import MesLivres from "./pages/MesLivres";
 import LivresEnCours from "./pages/LivresEnCours";
 import Galerie from "./pages/Galerie";
 import Profil from "./pages/Profil";
+import Login from "./pages/Login";
 
 export default function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // Si c'est l'admin, on force l'ouverture sur le dashboard
+  const defaultRoute = user && user.role === "admin" ? "/dashboard" : "/login";
+
   return (
     <Router>
       <div style={styles.navbar}>
@@ -22,7 +28,9 @@ export default function App() {
         <Route path="/livres-en-cours" element={<LivresEnCours />} />
         <Route path="/galerie" element={<Galerie />} />
         <Route path="/profil" element={<Profil />} />
-        <Route path="/" element={<TableauDeBord />} />
+        <Route path="/login" element={<Login />} />
+        {/* Redirection par défaut */}
+        <Route path="/" element={<Navigate to={defaultRoute} />} />
       </Routes>
     </Router>
   );
